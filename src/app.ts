@@ -48,7 +48,7 @@ export default class App {
     /**
      * Main function for initialization
      */
-    async init() {
+    async init(): Promise<void> {
         console.log('Downloading data...');
         await this.downloadCsvFile();
         await this.fetchNews();
@@ -68,7 +68,7 @@ export default class App {
     /**
      * Download any file to the data dir
      */
-    async download(url: string) {
+    async download(url: string): Promise<void> {
         const pathDataFile: string = path.dirname(__filename) + '/' + Constants.DATA_DIR + '/' + this.csvFileName;
         const writer: WriteStream = fs.createWriteStream(pathDataFile);
 
@@ -89,7 +89,7 @@ export default class App {
     /**
      * Download the csv file
      */
-    async downloadCsvFile() {
+    async downloadCsvFile(): Promise<void> {
         const pathDataDir: string = path.dirname(__filename) + '/' + Constants.DATA_DIR;
         if (fs.existsSync(pathDataDir)) {
             try {
@@ -134,7 +134,7 @@ export default class App {
     /**
      * Create country objects of all countries
      */
-    createCountryObjects() {
+    createCountryObjects(): void {
         const countryNames: string[] = this.getCountryNamesArray();
         const lastUpdatedBySourceTime: Date = this.getLastUpdatedBySourceTime()
         countryNames.forEach(countryName => {
@@ -148,7 +148,7 @@ export default class App {
     /**
      * Retrieve all rows from the csv file inside the data dir
      */
-    async setRowsData() {
+    async setRowsData(): Promise<void> {
         const pathDataFile: string = path.dirname(__filename) + '/' + Constants.DATA_DIR + '/' + this.csvFileName;
         this.csvRows = await csvtojson().fromFile(pathDataFile);
     }
@@ -156,7 +156,7 @@ export default class App {
     /**
      * Populate all country objects with data retrieved from the csv file
      */
-    populateCountryObjects() {
+    populateCountryObjects(): void {
 
         function getCaseCount(row: any, columnName: string): number {
             let caseValue: number = parseInt(row[columnName]);
@@ -215,7 +215,7 @@ export default class App {
     /**
      * Fetch news and save it to an array
      */
-    async fetchNews() {
+    async fetchNews(): Promise<void> {
         const url: string = sprintf(Constants.NEWS_API_URL, process.env.NEWS_API_KEY, process.env.NEWS_PAGE_SIZE);
         let newsObjects: News[] = [];
 
@@ -275,7 +275,7 @@ export default class App {
     /**
      * Save each country object to a MongoDB database
      */
-    async saveCountryDataToDb() {
+    async saveCountryDataToDb(): Promise<void> {
         await this.mongoDatabase.dropCountryCollection();
         const values: Country[] = Object.values(this.countryObjects)
         for (const value of values) {
@@ -286,7 +286,7 @@ export default class App {
     /**
      * Save each news object to a MongoDB database
      */
-    async saveNewsDataToDb() {
+    async saveNewsDataToDb(): Promise<void> {
         await this.mongoDatabase.dropNewsCollection();
         const values: News[] = this.newsObjects;
         for (const value of values) {

@@ -12,7 +12,7 @@ export default class Country {
     last_updated_by_source_at: Date | null = null;
 
 
-    setName(name: string) {
+    setName(name: string): void {
         this.name = name;
     }
 
@@ -20,23 +20,23 @@ export default class Country {
         return this.name;
     }
 
-    incrementConfirmed(confirmed: number) {
+    incrementConfirmed(confirmed: number): void {
         this.confirmed += confirmed;
     }
 
-    incrementDeaths(deaths: number) {
+    incrementDeaths(deaths: number): void {
         this.deaths += deaths;
     }
 
-    incrementActive(active: number) {
+    incrementActive(active: number): void {
         this.active += active;
     }
 
-    incrementRecovered(recovered: number) {
+    incrementRecovered(recovered: number): void {
         this.recovered += recovered;
     }
 
-    setLastUpdatedBySourceAt(lastUpdatedBySourceAt: Date | null) {
+    setLastUpdatedBySourceAt(lastUpdatedBySourceAt: Date | null): void {
         this.last_updated_by_source_at = lastUpdatedBySourceAt;
     }
 }

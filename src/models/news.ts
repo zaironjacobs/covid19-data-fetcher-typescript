@@ -12,23 +12,23 @@ export default class News {
     published_at: Date | null = null;
 
 
-    setTitle(title: string) {
+    setTitle(title: string): void {
         this.title = title;
     }
 
-    setSourceName(source_name: string) {
+    setSourceName(source_name: string): void {
         this.source_name = source_name;
     }
 
-    setAuthor(author: string) {
+    setAuthor(author: string): void {
         this.author = author;
     }
 
-    setDescription(description: string) {
+    setDescription(description: string): void {
         this.description = description;
     }
 
-    setUrl(url: string) {
+    setUrl(url: string): void {
         this.url = url;
     }
 

@@ -23,7 +23,7 @@ export default class MongoDatabase {
      *
      * @param {array} data
      */
-    async insertCountry(data: {}) {
+    async insertCountry(data: {}): Promise<void> {
         await this.countryCollection.insertOne(data);
     }
 
@@ -32,14 +32,14 @@ export default class MongoDatabase {
      *
      * @param {array} data
      */
-    async insertNews(data: {}) {
+    async insertNews(data: {}): Promise<void> {
         await this.newsCollection.insertOne(data);
     }
 
     /**
      * Connect to the client
      */
-    async connect() {
+    async connect(): Promise<void> {
         try {
             await this.client.connect();
             this.db = this.client.db(process.env.DATABASE);
@@ -53,14 +53,14 @@ export default class MongoDatabase {
     /**
      * Close the client
      */
-    async close() {
+    async close(): Promise<void> {
         await this.client.close();
     }
 
     /**
      * Drop the country collection from the MongoDB database
      */
-    async dropCountryCollection() {
+    async dropCountryCollection(): Promise<void> {
         try {
             await this.countryCollection.drop();
         } catch {
@@ -71,7 +71,7 @@ export default class MongoDatabase {
     /**
      * Drop the news collection from the MongoDB database
      */
-    async dropNewsCollection() {
+    async dropNewsCollection(): Promise<void> {
         try {
             await this.newsCollection.drop();
         } catch {
