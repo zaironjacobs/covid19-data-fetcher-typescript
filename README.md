@@ -45,7 +45,7 @@ An example of a news document:
 
 ## Download
 ```console
-$ git clone https://github.com/zaironjacobs/covid19-data-fetcher-javascript
+$ git clone https://github.com/zaironjacobs/covid19-data-fetcher-typescript
 ```
 
 ## Usage
@@ -62,7 +62,7 @@ NEWS_PAGE_SIZE=5
 
 To use:
 ```console
-$ cd covid19-data-fetcher-javascript
+$ cd covid19-data-fetcher-typescript
 $ npm install
 $ npm run start
 ```
@@ -71,5 +71,5 @@ $ npm run start
 At minute 0 and 30:
 
 ```
-0,30 * * * * cd ~/covid19-data-fetcher-javascript && npm run start
+0,30 * * * * cd ~/covid19-data-fetcher-typescript && npm run start
 ```
