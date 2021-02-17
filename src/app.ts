@@ -8,6 +8,7 @@ import csvtojson from 'csvtojson';
 import Constants from './constants';
 import Country from './models/country';
 import News from './models/news';
+import Article from './interfaces/article';
 import MongoDatabase from './mongoDatabase';
 
 
@@ -20,7 +21,7 @@ import MongoDatabase from './mongoDatabase';
 export default class App {
     csvFileName: string;
     csvRows: any[];
-    countryObjects: CountryObjects;
+    countryObjects: { [key: string]: Country; }
     newsObjects: News[];
 
     totalDeaths: number;
@@ -293,19 +294,4 @@ export default class App {
             await this.mongoDatabase.insertNews(value);
         }
     }
-}
-
-interface CountryObjects {
-    [key: string]: Country;
-}
-
-interface Article {
-    title: string;
-    source: {
-        name: string;
-    };
-    author: string;
-    description: string;
-    url: string;
-    publishedAt: Date;
 }
