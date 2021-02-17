@@ -8,4 +8,3 @@ declare namespace NodeJS {
         NEWS_PAGE_SIZE: number;
     }
 }
-
