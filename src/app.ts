@@ -7,14 +7,14 @@ import csvtojson from 'csvtojson';
 
 import Constants from './constants';
 import Country from './models/country';
-import News from './models/news';
-import Article from './interfaces/article';
+import Article from './models/article';
+import ArticleResponse from './interfaces/article_response';
 import MongoDatabase from './mongoDatabase';
 
 
 /**
  * Fetch and save data of each country to a MongoDB database.
- * Fetch and save news related to COVID-19 to a MongoDB database.
+ * Fetch and save articles related to COVID-19 to a MongoDB database.
  *
  * @author      Zairon Jacobs <zaironjacobs@gmail.com>
  */
@@ -22,7 +22,7 @@ export default class App {
     csvFileName: string;
     csvRows: any[];
     countryObjects: { [key: string]: Country; }
-    newsObjects: News[];
+    articleObjects: Article[];
 
     totalDeaths: number;
     totalActive: number;
@@ -36,7 +36,7 @@ export default class App {
 
         this.csvRows = [];
         this.countryObjects = {};
-        this.newsObjects = [];
+        this.articleObjects = [];
 
         this.totalDeaths = 0;
         this.totalActive = 0;
@@ -52,14 +52,14 @@ export default class App {
     async init(): Promise<void> {
         console.log('Downloading data...');
         await this.downloadCsvFile();
-        await this.fetchNews();
+        await this.fetchArticles();
 
         console.log('Saving data to database...');
         await this.setRowsData();
         this.createCountryObjects();
         this.populateCountryObjects();
         await this.mongoDatabase.connect();
-        await this.saveNewsDataToDb();
+        await this.saveArticleDataToDb();
         await this.saveCountryDataToDb();
         await this.mongoDatabase.close();
 
@@ -214,63 +214,63 @@ export default class App {
     }
 
     /**
-     * Fetch news and save it to an array
+     * Fetch articles and save them to an array
      */
-    async fetchNews(): Promise<void> {
+    async fetchArticles(): Promise<void> {
         const url: string = sprintf(Constants.NEWS_API_URL, process.env.NEWS_API_KEY, process.env.NEWS_PAGE_SIZE);
-        let newsObjects: News[] = [];
+        let articleObjects: Article[] = [];
 
         await axios.get(url)
             .then(function (response: AxiosResponse) {
                 const articles: [] = response.data['articles'];
 
-                articles.forEach((article: Article) => {
-                    const newsObj: News = new News();
+                articles.forEach((articleResponse: ArticleResponse) => {
+                    const articleObj: Article = new Article();
 
                     let title: string = '-';
-                    if (article.title !== null) {
-                        title = article.title;
+                    if (articleResponse.title !== null) {
+                        title = articleResponse.title;
                     }
-                    newsObj.setTitle(title);
+                    articleObj.setTitle(title);
 
                     let sourceName: string = '-';
-                    if (article.source.name !== null) {
-                        sourceName = article.source.name;
+                    if (articleResponse.source.name !== null) {
+                        sourceName = articleResponse.source.name;
                     }
-                    newsObj.setSourceName(sourceName);
+                    articleObj.setSourceName(sourceName);
 
                     let author: string = '-';
-                    if (article.author !== null) {
-                        author = article.author;
+                    if (articleResponse.author !== null) {
+                        author = articleResponse.author;
                     }
-                    newsObj.setAuthor(author);
+                    articleObj.setAuthor(author);
 
                     let description: string = '-';
-                    if (article.description !== null) {
-                        description = article.description;
+                    if (articleResponse.description !== null) {
+                        description = articleResponse.description;
                     }
-                    newsObj.setDescription(description);
+                    articleObj.setDescription(description);
 
                     let url: string = '-';
-                    if (article.url !== null) {
-                        url = article.url;
+                    if (articleResponse.url !== null) {
+                        url = articleResponse.url;
                     }
-                    newsObj.setUrl(url);
+                    articleObj.setUrl(url);
 
-                    const date_moment: Moment = moment(article.publishedAt);
+                    const date_moment: Moment = moment(articleResponse.publishedAt);
                     const publishedAt: Date = new Date(Date.UTC(
                         date_moment.year(), date_moment.month(), date_moment.date(),
                         date_moment.hours(), date_moment.minute(), date_moment.second()));
-                    newsObj.setPublishedAt(publishedAt);
+                    articleObj.setPublishedAt(publishedAt);
 
-                    newsObjects.push(newsObj);
+                    articleObjects.push(articleObj);
                 });
             })
             .catch(function () {
-                console.log('Error: could not fetch news');
+                console.log('Error: could not fetch articles');
             });
 
-        this.newsObjects = newsObjects;
+        this.articleObjects = articleObjects;
     }
 
     /**
@@ -285,13 +285,13 @@ export default class App {
     }
 
     /**
-     * Save each news object to a MongoDB database
+     * Save each article object to a MongoDB database
      */
-    async saveNewsDataToDb(): Promise<void> {
-        await this.mongoDatabase.dropNewsCollection();
-        const values: News[] = this.newsObjects;
+    async saveArticleDataToDb(): Promise<void> {
+        await this.mongoDatabase.dropArticleCollection();
+        const values: Article[] = this.articleObjects;
         for (const value of values) {
-            await this.mongoDatabase.insertNews(value);
+            await this.mongoDatabase.insertArticle(value);
         }
     }
 }

@@ -1,9 +1,9 @@
 /**
- * News class to store news data
+ * Article class to store article data
  *
  * @author      Zairon Jacobs <zaironjacobs@gmail.com>
  */
-export default class News {
+export default class Article {
     title: string = '';
     source_name: string = '';
     author: string = '';

@@ -1,9 +1,9 @@
 /**
- * Article interface
+ * Article response interface
  *
  * @author      Zairon Jacobs <zaironjacobs@gmail.com>
  */
-export default interface Article {
+export default interface ArticleResponse {
     title: string;
     source: {
         name: string;

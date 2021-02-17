@@ -11,7 +11,7 @@ const mongoOptions = {useUnifiedTopology: true};
 export default class MongoDatabase {
     client: MongoClient;
     countryCollection!: Collection;
-    newsCollection!: Collection;
+    articleCollection!: Collection;
     db!: Db;
 
     constructor() {
@@ -28,12 +28,12 @@ export default class MongoDatabase {
     }
 
     /**
-     * Insert data into the news collection
+     * Insert data into the article collection
      *
      * @param {array} data
      */
-    async insertNews(data: {}): Promise<void> {
-        await this.newsCollection.insertOne(data);
+    async insertArticle(data: {}): Promise<void> {
+        await this.articleCollection.insertOne(data);
     }
 
     /**
@@ -44,7 +44,7 @@ export default class MongoDatabase {
             await this.client.connect();
             this.db = this.client.db(process.env.DATABASE);
             this.countryCollection = await this.db.collection(process.env.COLLECTION_COUNTRY);
-            this.newsCollection = await this.db.collection(process.env.COLLECTION_NEWS);
+            this.articleCollection = await this.db.collection(process.env.COLLECTION_ARTICLE);
         } catch {
             console.log('Could not connect to MongoDB database');
         }
@@ -69,11 +69,11 @@ export default class MongoDatabase {
     }
 
     /**
-     * Drop the news collection from the MongoDB database
+     * Drop the article collection from the MongoDB database
      */
-    async dropNewsCollection(): Promise<void> {
+    async dropArticleCollection(): Promise<void> {
         try {
-            await this.newsCollection.drop();
+            await this.articleCollection.drop();
         } catch {
             // ignore
         }
