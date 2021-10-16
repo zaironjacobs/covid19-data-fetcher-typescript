@@ -1,7 +1,5 @@
 import {MongoClient, Collection, Db} from 'mongodb';
 
-const mongoOptions = {useUnifiedTopology: true};
-
 
 /**
  * MongoDB
@@ -15,7 +13,7 @@ export default class MongoDatabase {
     db!: Db;
 
     constructor() {
-        this.client = new MongoClient(process.env.CONNECTION_STRING, mongoOptions);
+        this.client = new MongoClient(process.env.CONNECTION_STRING);
     }
 
     /**
@@ -32,7 +30,7 @@ export default class MongoDatabase {
      *
      * @param {array} data
      */
-    async insertArticle(data: {}): Promise<void> {
+    async insertArticle(data: {}) {
         await this.articleCollection.insertOne(data);
     }
 

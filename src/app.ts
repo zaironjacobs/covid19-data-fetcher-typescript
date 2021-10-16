@@ -10,6 +10,7 @@ import Country from './models/country';
 import Article from './models/article';
 import ArticleResponse from './interfaces/article_response';
 import MongoDatabase from './mongoDatabase';
+import {Pipe} from "stream";
 
 
 /**
@@ -73,13 +74,14 @@ export default class App {
         const pathDataFile: string = path.dirname(__filename) + '/' + Constants.DATA_DIR + '/' + this.csvFileName;
         const writer: WriteStream = fs.createWriteStream(pathDataFile);
 
-        const response: AxiosResponse = await axios({
+        const response: AxiosResponse<any> = await axios({
             url,
             method: 'GET',
             responseType: 'stream'
         });
 
-        response.data.pipe(writer);
+        response.data.pipe(writer)
+
 
         return new Promise((resolve, reject) => {
             writer.on('finish', resolve);
@@ -221,7 +223,7 @@ export default class App {
         let articleObjects: Article[] = [];
 
         await axios.get(url)
-            .then(function (response: AxiosResponse) {
+            .then(function (response: AxiosResponse<any>) {
                 const articles: [] = response.data['articles'];
 
                 articles.forEach((articleResponse: ArticleResponse) => {
