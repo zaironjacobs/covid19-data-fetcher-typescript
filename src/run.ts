@@ -1,7 +1,7 @@
-import * as dotenv from 'dotenv';
-import App from './app';
+import * as dotenv from 'dotenv'
+import App from './app'
 
-dotenv.config();
+dotenv.config()
 
-const app = new App();
-app.init();
+const app = new App()
+app.init().then()
